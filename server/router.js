@@ -109,7 +109,7 @@ router.post('/api/trigger', (req, res) => {
   setTimeout(() => {
     particle.call('building_right', 'baker_light', 'off')
     particle.call('building_right', 'door', 'close')
-  }, 2000)
+  }, 5000)
 
   res.sendStatus(200)
 })
