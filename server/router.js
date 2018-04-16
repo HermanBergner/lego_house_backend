@@ -82,7 +82,7 @@ router.get('/api/history/:limit?', (req, res) => {
       } else {
         res.send(data)
       }
-    }).limit(limit)
+    }).limit(limit).sort({date:-1}); 
   } catch (e) {
     res.sendStatus(400)
   }
