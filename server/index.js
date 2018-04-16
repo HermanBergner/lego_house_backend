@@ -13,7 +13,7 @@ const particle = new Particle('0885fe851c827803175ecff92dd30aae43fb065b')
 var request = require('request');
 
 
-mongoose.connect('mongodb://localhost/Local')
+mongoose.connect('mongodb://localhost/backend')
 
 //remove later, this is bad
 app.use(function (req, res, next) {
