@@ -29,7 +29,11 @@ module.exports = function http(o) {
     return new Promise((resolve, reject) => {
         const req = https.request(options, (res) => {
             res.on('data', (d) => {
-                resolve(JSON.parse(d))
+                try{
+                    resolve(JSON.parse(d))
+                }catch(e){
+                    reject(e)
+                }
             });
         });
 

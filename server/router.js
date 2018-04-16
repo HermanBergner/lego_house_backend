@@ -73,10 +73,9 @@ router.get('/api/history/:limit?', (req, res) => {
   let filter = {}
   try {
     if (req.query.filter)
-      filter = JSON.parse(req.query.filter)
+      filter = req.query.filter
+      
     const limit = parseInt(req.params.limit) || 10
-
-
     Request.find(filter, (err, data) => {
       if (err) {
         res.send(err)
@@ -101,11 +100,9 @@ function logRequest(data) {
 
     upload.save((err, data) => {
       if (err) {
-        console.log(err)
         reject(err)
       }
       else {
-        console.log(data)
         resolve(data)
       }
     })
