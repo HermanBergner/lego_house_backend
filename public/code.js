@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 buildTable(data)
             })
         }
-
-
         socket.on('call', (response) => {
             delete response['_id']
             delete response['__v']

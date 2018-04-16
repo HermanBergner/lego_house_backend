@@ -97,6 +97,15 @@ router.get('/api/history/:limit?', (req, res) => {
   }
 })
 
+
+
+router.post('/api/trigger', (req, res) => {
+
+  console.log('TRIGGER')
+
+  res.sendStatus(200)
+})
+
 function logRequest(data, io) {
   return new Promise((resolve, reject) => {
     const upload = new Request({
@@ -117,7 +126,6 @@ function logRequest(data, io) {
       }
     })
   })
-
 }
 
 
