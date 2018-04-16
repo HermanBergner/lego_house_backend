@@ -32,7 +32,7 @@ app.use(router)
 
 
 
-server.listen(PORT, HOST, () => {
+server.listen(PORT, () => {
   startSocket()
 })
 
