@@ -64,8 +64,8 @@ class Particle {
             logRequest({
               name: name,
               argument: arg,
-              device: data.id,
-              value: data.return_value,
+              device: data.id || undefined,
+              value: data.return_value || undefined,
               date: new Date()
             })
               .then(data => {
