@@ -5,6 +5,7 @@ const async = require('async')
 const Light = require('./schemas/light')
 const Request = require('./schemas/request')
 const particle = new Particle('0885fe851c827803175ecff92dd30aae43fb065b')
+const url = require('url')
 particle.selected = 'Particle'
 
 
@@ -58,7 +59,6 @@ router.post('/api/call', (req, res) => {
         name: name,
         argument: arg,
         device: data.id,
-        origin: req.ip,
         value: data.return_value,
         date: new Date()
       })
@@ -68,34 +68,26 @@ router.post('/api/call', (req, res) => {
     .catch(err => res.send(err))
 })
 
-router.post('/api/history/', (req, res) => {
+router.get('/api/history/:limit?', (req, res) => {
 
-  const filter = req.body.filter || {}
-  const limit = req.body.limit || undefined
+  let filter = {}
+  try {
+    if (req.query.filter)
+      filter = JSON.parse(req.query.filter)
+    const limit = parseInt(req.params.limit) || 10
 
-  Request.find(filter, (err, data) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(data)
-    }
-  }).limit(limit)
+
+    Request.find(filter, (err, data) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.send(data)
+      }
+    }).limit(limit)
+  } catch (e) {
+    res.sendStatus(400)
+  }
 })
-
-router.get('/api/history/', (req, res) => {
-
-  const filter = req.body.filter || {}
-  const limit = req.body.limit || undefined
-
-  Request.find(filter, (err, data) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(data)
-    }
-  }).limit(limit)
-})
-
 
 function logRequest(data) {
   return new Promise((resolve, reject) => {
@@ -103,7 +95,6 @@ function logRequest(data) {
       name: new String(data.name) || undefined,
       argument: new String(data.argument) || undefined,
       date: new String(data.date),
-      origin: new String(data.origin) || undefined,
       value: new String(data.status) || undefined,
       device: new String(data.device) || undefined,
     })
