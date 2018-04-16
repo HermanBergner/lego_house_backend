@@ -92,12 +92,12 @@ router.post('/api/trigger', (req, res) => {
 
   console.log(req.body)
 
-  particle.call('building_right', 'baker_light', 'on')
-  particle.call('building_right', 'door', 'open')
+  particle.call('building_right', 'baker_light', 'on', req.io)
+  particle.call('building_right', 'door', 'open', req.io)
 
   setTimeout(() => {
-    particle.call('building_right', 'baker_light', 'off')
-    particle.call('building_right', 'door', 'close')
+    particle.call('building_right', 'baker_light', 'off', req.io)
+    particle.call('building_right', 'door', 'close', req.io)
   }, 5000)
 
   res.sendStatus(200)
