@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     parent = document.querySelector('#table-body')
 
 
-    get('http://localhost:8000/api/history/10').then(response => {
+    get('https://smart-house-iot.herokuapp.com/api/history/5').then(response => {
 
         for (let item of response) {
             watcher.push(item, (data) => {
@@ -21,11 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.on('call', (response) => {
             delete response['_id']
             delete response['__v']
-            watcher.push(response, data => { 
-        
-                
-                buildTable(data) 
-                let audio  = new Audio('./sound/notification.mp3')
+            watcher.push(response, data => {
+
+
+                buildTable(data)
+                let audio = new Audio('./sound/notification.mp3')
                 audio.play()
             })
         })
