@@ -1,0 +1,16 @@
+#table-container{
+    max-height: 400px !important;
+    overflow-y: scroll;
+    table{
+        width: 100%;
+        
+    }
+}
+
+.online{
+    color: rgb(29, 190, 69) !important;
+}
+
+.offline{
+    color: rgb(190, 29, 37) !important;
+}

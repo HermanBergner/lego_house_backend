@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script src="./code.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./lib/mdl/material.min.css">
+    <script src="./lib/mdl/material.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class="mdl-layout mdl-js-layout
+        mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Cloud Dashboard</span>
+            </div>
+        </header>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <h3>Request History</h3>
+                <div id='table-container'>
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                        <tr>
+                            <th>Function</th>
+                            <th>Argument</th>
+                            <th>Date</th>
+                            <th>Origin</th>
+                            <th>Value</th>
+                            <th>Device</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <ul class="demo-list-icon mdl-list">
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon online">wifi</i>
+                            Bryan Cranston
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon offline">wifi</i>
+                            Aaron Paul
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon offline">wifi</i>
+                            Bob Odenkirk
+                        </span>
+                    </li>
+                </ul>
+
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
+
+<!-- device: String,
+name: String,
+argument: String,
+origin: String,
+date: Date,
+value: String -->

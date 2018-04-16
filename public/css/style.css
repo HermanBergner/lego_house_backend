@@ -1,0 +1,13 @@
+#table-container {
+  max-height: 400px !important;
+  overflow-y: scroll; }
+  #table-container table {
+    width: 100%; }
+
+.online {
+  color: #1dbe45 !important; }
+
+.offline {
+  color: #be1d25 !important; }
+
+/*# sourceMappingURL=style.css.map */
