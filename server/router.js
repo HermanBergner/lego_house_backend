@@ -5,8 +5,6 @@ const async = require('async')
 const Light = require('./schemas/light')
 const Request = require('./schemas/request')
 const particle = new Particle('0885fe851c827803175ecff92dd30aae43fb065b')
-const url = require('url')
-particle.selected = 'Particle'
 
 
 
@@ -53,19 +51,10 @@ router.post('/api/call', (req, res) => {
   console.log(`request from ${req.ip}`)
 
 
-  particle.call(device, name, arg)
-    .then(data => {
-      logRequest({
-        name: name,
-        argument: arg,
-        device: data.id,
-        value: data.return_value,
-        date: new Date()
-      }, req.io)
-        .then(() => { res.send(data) })
-        .catch(err => res.send({ Error: 'could not save to db' }))
-    })
-    .catch(err => res.send(err))
+  particle.call(device, name, arg, req.io)
+    .then((data) =>  res.send(data) )
+    .catch(err => res.send({ Error: 'could not save to db' }))
+
 })
 
 router.get('/api/history/:limit?', (req, res) => {
@@ -114,27 +103,7 @@ router.post('/api/trigger', (req, res) => {
   res.sendStatus(200)
 })
 
-function logRequest(data, io) {
-  return new Promise((resolve, reject) => {
-    const upload = new Request({
-      name: new String(data.name) || undefined,
-      argument: new String(data.argument) || undefined,
-      date: new String(data.date),
-      value: new String(data.value) || undefined,
-      device: new String(data.device) || undefined,
-    })
 
-    upload.save((err, data) => {
-      if (err) {
-        reject(err)
-      }
-      else {
-        io.emit('call', data)
-        resolve(data)
-      }
-    })
-  })
-}
 
 
 

@@ -1,4 +1,5 @@
 const http = require('./http')
+const Request = require('../schemas/request')
 
 class Particle {
   constructor(token) {
@@ -49,10 +50,7 @@ class Particle {
     })
   }
 
-
-
-  call(device, name, arg) {
-
+  call(device, name, arg, io) {
     const { base, token, version } = this
     return new Promise((resolve, reject) => {
       this.getDeviceId(device)
@@ -62,8 +60,20 @@ class Particle {
             path: `/v1/devices/${id}/${name}?${token}`,
             method: 'POST',
             data: { arg: arg }
+          }).then(data => {
+            logRequest({
+              name: name,
+              argument: arg,
+              device: data.id,
+              value: data.return_value,
+              date: new Date()
+            })
+              .then(data => {
+                io.emit('call', data)
+                resolve(data)
+              })
+              .catch(err => reject({ Error: 'could not save to db' }))
           })
-            .then(data => resolve(data))
             .catch(err => reject(err))
         })
         .catch(err => reject(err))
@@ -93,3 +103,26 @@ class Particle {
 }
 
 module.exports = Particle
+
+
+
+function logRequest(data) {
+  return new Promise((resolve, reject) => {
+    const upload = new Request({
+      name: new String(data.name) || undefined,
+      argument: new String(data.argument) || undefined,
+      date: new String(data.date),
+      value: new String(data.value) || undefined,
+      device: new String(data.device) || undefined,
+    })
+
+    upload.save((err, data) => {
+      if (err) {
+        reject(err)
+      }
+      else {
+        resolve(data)
+      }
+    })
+  })
+}
