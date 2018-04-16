@@ -82,6 +82,20 @@ router.post('/api/history/', (req, res) => {
   }).limit(limit)
 })
 
+router.get('/api/history/', (req, res) => {
+
+  const filter = req.body.filter || {}
+  const limit = req.body.limit || undefined
+
+  Request.find(filter, (err, data) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(data)
+    }
+  }).limit(limit)
+})
+
 
 function logRequest(data) {
   return new Promise((resolve, reject) => {

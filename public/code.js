@@ -1,27 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const socket = io()
 
 
-    const body = document.querySelector('#table-body')
-    socket.on('history', (data) => {
 
-        while (body.hasChildNodes()) {
-            body.removeChild(body.lastChild)
-        }
-        
-        data = JSON.parse(data)
-        data.forEach(element => {
-            delete element['_id']
-            delete element['__v']
+    get('http://localhost:8000/api/ping/3c0026001047343438323536').then(res => console.log(res))
 
-            const tr = document.createElement('tr')
-            for (let [key, value] of Object.entries(element)) {
-                const td = document.createElement('td')
-                td.innerHTML = value;
-                tr.appendChild(td)
-            }
-            body.appendChild(tr)
 
-        });
-    })
 })
+
+
+
+function post(url, data) {
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            method: 'POST',
+            body
+                : JSON.stringify(data)
+        })
+            .then(data => data.json())
+            .catch(err => reject(err))
+            .then(data => resolve(data))
+
+    })
+}
+
+
+function get(url) {
+    return new Promise((resolve, reject) => {
+        fetch(url)
+            .then(data => data.json())
+            .catch(err => reject(err))
+            .then(data => resolve(data))
+
+    })
+}
