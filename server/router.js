@@ -13,7 +13,6 @@ particle.selected = 'Particle'
 
 
 router.get('/api', (req, res) => {
-
   res.sendStatus(418)
 })
 
@@ -52,17 +51,18 @@ router.post('/api/call', (req, res) => {
 
   const { name, arg, device } = req.body
   console.log(`request from ${req.ip}`)
+
+
   particle.call(device, name, arg)
     .then(data => {
-
       logRequest({
         name: name,
         argument: arg,
         device: data.id,
         value: data.return_value,
         date: new Date()
-      })
-        .then(() => res.send(data))
+      }, req.io)
+        .then(() => { res.send(data) })
         .catch(err => res.send({ Error: 'could not save to db' }))
     })
     .catch(err => res.send(err))
@@ -74,27 +74,36 @@ router.get('/api/history/:limit?', (req, res) => {
   try {
     if (req.query.filter)
       filter = req.query.filter
-      
+
     const limit = parseInt(req.params.limit) || 10
     Request.find(filter, (err, data) => {
       if (err) {
         res.send(err)
       } else {
+        data = data.map(d => {
+          return {
+            name: d.name,
+            argument: d.argument,
+            date: d.date,
+            value: d.value,
+            device: d.device
+          }
+        })
         res.send(data)
       }
-    }).limit(limit).sort({date:-1}); 
+    }).limit(limit).sort({ date: -1 });
   } catch (e) {
     res.sendStatus(400)
   }
 })
 
-function logRequest(data) {
+function logRequest(data, io) {
   return new Promise((resolve, reject) => {
     const upload = new Request({
       name: new String(data.name) || undefined,
       argument: new String(data.argument) || undefined,
       date: new String(data.date),
-      value: new String(data.status) || undefined,
+      value: new String(data.value) || undefined,
       device: new String(data.device) || undefined,
     })
 
@@ -103,6 +112,7 @@ function logRequest(data) {
         reject(err)
       }
       else {
+        io.emit('call', data)
         resolve(data)
       }
     })

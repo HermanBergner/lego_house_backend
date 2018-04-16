@@ -27,6 +27,11 @@ app.use(function (req, res, next) {
 
 app.use(express.static(path.resolve(__dirname, '../public')))
 app.use(bodyParser.json())
+app.use(function (req, res, next) {
+  req.io = io;
+  next();
+});
+
 app.use(router)
 
 
@@ -42,7 +47,6 @@ server.listen(PORT, () => {
 
 function startSocket() {
   io.on('connection', (socket) => {
-
     //updateHistory(socket)
 
   })
