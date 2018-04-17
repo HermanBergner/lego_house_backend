@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     parent = document.querySelector('#table-body')
 
 
+    // get('http://localhost:8000/api/history/5').then(response => {
     get('https://smart-house-iot.herokuapp.com/api/history/5').then(response => {
 
         for (let item of response) {
