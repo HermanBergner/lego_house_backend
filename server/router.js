@@ -6,10 +6,6 @@ const Light = require('./schemas/light')
 const Request = require('./schemas/request')
 const particle = new Particle('0885fe851c827803175ecff92dd30aae43fb065b')
 
-
-
-
-
 router.get('/api', (req, res) => {
   res.sendStatus(418)
 })
@@ -20,7 +16,6 @@ router.get('/api/devices', (req, res) => {
 })
 
 router.get('/api/info', (req, res) => {
-
   res.send({
     Error: 'No building',
     Usage: '/api/info/:building'
@@ -44,26 +39,22 @@ router.get('/api/ping/:building?', (req, res) => {
     .catch(err => res.send(err))
 })
 
-
 router.post('/api/call', (req, res) => {
 
   const { name, arg, device } = req.body
   console.log(`request from ${req.ip}`)
-
-
   particle.call(device, name, arg, req.io)
     .then((data) =>  res.send(data) )
     .catch(err => res.send({ Error: 'could not save to db' }))
-
 })
 
 router.get('/api/history/:limit?', (req, res) => {
 
   let filter = {}
   try {
-    if (req.query.filter)
+    if (req.query.filter){
       filter = req.query.filter
-
+    }
     const limit = parseInt(req.params.limit) || 10
     Request.find(filter, (err, data) => {
       if (err) {
@@ -90,22 +81,14 @@ router.get('/api/history/:limit?', (req, res) => {
 
 router.post('/api/trigger', (req, res) => {
 
-  console.log(req.body)
-
   particle.call('building_right', 'baker_light', 'on', req.io)
   particle.call('building_right', 'door', 'open', req.io)
 
   setTimeout(() => {
     particle.call('building_right', 'baker_light', 'off', req.io)
     particle.call('building_right', 'door', 'close', req.io)
-  }, 5000)
+  }, 4000)
 
   res.sendStatus(200)
 })
-
-
-
-
-
-
 module.exports = router

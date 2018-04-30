@@ -61,7 +61,7 @@ class Particle {
             method: 'POST',
             data: { arg: arg }
           }).then(data => {
-            console.log(data.return_value)
+            console.log(data)
             logRequest({
               name: name,
               argument: arg,
@@ -107,8 +107,7 @@ module.exports = Particle
 
 
 
-function logRequest(data) {
-  console.log(data)
+function logRequest(data) { 
   return new Promise((resolve, reject) => {
     const upload = new Request({
       name: new String(data.name) || undefined,
