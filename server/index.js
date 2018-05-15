@@ -28,6 +28,7 @@ app.use(function (req, res, next) {
 
 app.use(express.static(path.resolve(__dirname, '../public')))
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(function (req, res, next) {
   req.io = io;
   next();
@@ -43,17 +44,12 @@ server.listen(PORT, () => {
 })
 
 
-
-
-
 function startSocket() {
   io.on('connection', (socket) => {
     //updateHistory(socket)
 
   })
 }
-
-
 function updateHistory(socket) {
   request.post('http://localhost:8000/api/history', (err, data) => {
     if (err) {

@@ -43,6 +43,7 @@ router.post('/api/call', (req, res) => {
 
   const { name, arg, device } = req.body
   console.log(`request from ${req.ip}`)
+  console.log(name, arg, device)
   particle.call(device, name, arg, req.io)
     .then((data) =>  res.send(data) )
     .catch(err => res.send({ Error: 'could not save to db' }))
