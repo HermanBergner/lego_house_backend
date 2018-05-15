@@ -92,4 +92,12 @@ router.post('/api/trigger', (req, res) => {
 
   res.sendStatus(200)
 })
+
+router.post('/api/status', (req, res) => {
+
+  console.log(req.body)
+
+
+  res.sendStatus(200)
+})
 module.exports = router
