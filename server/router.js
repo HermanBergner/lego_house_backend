@@ -84,11 +84,11 @@ router.get('/api/history/:limit?', (req, res) => {
 router.post('/api/trigger', (req, res) => {
 
   particle.call('building_right', 'baker_light', 'on', req.io)
-  particle.call('building_right', 'door', 'open', req.io)
+  particle.call('building_right', 'door', '180', req.io)
 
   setTimeout(() => {
     particle.call('building_right', 'baker_light', 'off', req.io)
-    particle.call('building_right', 'door', 'close', req.io)
+    particle.call('building_right', 'door', '0', req.io)
   }, 4000)
 
   res.sendStatus(200)
