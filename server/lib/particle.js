@@ -1,4 +1,5 @@
 const http = require('./http')
+const Status = require('../schemas/status')
 const Request = require('../schemas/request')
 
 class Particle {
@@ -61,23 +62,9 @@ class Particle {
             method: 'POST',
             data: { arg: arg }
           }).then(data => {
-            console.log(data)
-            logRequest({
-              name: name,
-              argument: arg,
-              device: data.id || undefined,
-              value: data.return_value,
-              date: new Date()
-            })
-              .then(data => {
-                io.emit('call', data)
-                resolve(data)
-              })
-              .catch(err => reject({ Error: 'could not save to db' }))
-          })
-            .catch(err => reject(err))
-        })
-        .catch(err => reject(err))
+            updateStatus(device, name, data.return_value).then(data => resolve(data)).catch(err => reject(err))
+          }) .catch(err => reject(err))
+        }) .catch(err => reject(err))
     })
   }
 
@@ -105,7 +92,18 @@ class Particle {
 
 module.exports = Particle
 
-
+function updateStatus(device, name, status){
+  console.log(device, name, status)
+  return new Promise((resolve, reject) => {
+    Status.update({name}, {$set:{name, device, status}}, {upsert:true}, (err, data) => {
+      if(err){
+        reject(err)
+      }else{
+        resolve({status})
+      }
+    })
+  })
+}
 
 function logRequest(data) { 
   return new Promise((resolve, reject) => {

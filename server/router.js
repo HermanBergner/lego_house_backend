@@ -4,6 +4,7 @@ const router = express.Router()
 const async = require('async')
 const Light = require('./schemas/light')
 const Request = require('./schemas/request')
+const Status = require('./schemas/status')
 const particle = new Particle('0885fe851c827803175ecff92dd30aae43fb065b')
 
 router.get('/api', (req, res) => {
@@ -46,7 +47,7 @@ router.post('/api/call', (req, res) => {
   console.log(name, arg, device)
   particle.call(device, name, arg, req.io)
     .then((data) =>  res.send(data) )
-    .catch(err => res.send({ Error: 'could not save to db' }))
+    .catch(err => res.send(err))
 })
 
 router.get('/api/history/:limit?', (req, res) => {
@@ -93,16 +94,18 @@ router.post('/api/trigger', (req, res) => {
   res.sendStatus(200)
 })
 
-router.post('/api/status', (req, res) => {
-  console.log(req.body.data)
-  for(let [key, value] of Object.entries(req.body.data)){
-    console.log(key, value)
-  }
-  res.sendStatus(200)
-})
 
-router.get('/api/status', (req, res) => {
-  console.log(req.body)
-  res.sendStatus(200)
+
+
+router.get('/api/status/:name?', (req, res) => {
+  const { name } = req.params
+  Status.find({name: name ? name : /.*/}, (err, data) => {
+    if(err) {
+      res.send(500)
+      return
+    }else{
+      res.send(data)
+    }
+  })
 })
 module.exports = router

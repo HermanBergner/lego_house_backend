@@ -14,9 +14,9 @@ var request = require('request');
 
 const cloudUsername = 'root'
 const cloudPassword = 'root'
+const database      = 'test' 
 
-mongoose.connect(`mongodb://root:${cloudPassword}@cluster0-shard-00-00-5cnmx.mongodb.net:27017,cluster0-shard-00-01-5cnmx.mongodb.net:27017,cluster0-shard-00-02-5cnmx.mongodb.net:27017/data?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin`)
-// mongoose.connect(`mongodb://localhost/data`)
+mongoose.connect(`mongodb://root:${cloudPassword}@cluster0-shard-00-00-5cnmx.mongodb.net:27017,cluster0-shard-00-01-5cnmx.mongodb.net:27017,cluster0-shard-00-02-5cnmx.mongodb.net:27017/${database}?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin`)
 
 //remove later, this is bad
 app.use(function (req, res, next) {
