@@ -94,8 +94,9 @@ router.post('/api/trigger', (req, res) => {
 })
 
 router.post('/api/status', (req, res) => {
-  console.log(req.body)
-  console.log(JSON.stringify(req.body.data))
+  console.log(req.body.data)
+  const test = JSON.stringify(req.body.data)
+  console.log(test)
   res.sendStatus(200)
 })
 
