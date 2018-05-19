@@ -94,9 +94,9 @@ router.post('/api/trigger', (req, res) => {
 })
 
 router.post('/api/status', (req, res) => {
-  console.log(req.body.data)
-  const test = JSON.stringify(req.body.data)
-  console.log(test)
+  for(let [key, value] of Object.entries(req.body.data)){
+    console.log(key, value)
+  }
   res.sendStatus(200)
 })
 
