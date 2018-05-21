@@ -10,4 +10,4 @@ const Status = new mongoose.Schema({
 })
 
 
-module.exports = mongoose.model('Status', Status)
+module.exports = mongoose.model('Info', Status)
