@@ -93,9 +93,9 @@ class Particle {
 module.exports = Particle
 
 function updateStatus(device, name, status){
-  console.log(device, name, status)
+  const type = name.split("_")[1]
   return new Promise((resolve, reject) => {
-    Status.update({name}, {$set:{name, device, status}}, {upsert:true}, (err, data) => {
+    Status.update({name}, {$set:{name, device, status, type}}, {upsert:true}, (err, data) => {
       if(err){
         reject(err)
       }else{
