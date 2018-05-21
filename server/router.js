@@ -1,8 +1,6 @@
 const Particle = require('./lib/particle.js')
 const express = require('express')
 const router = express.Router()
-const async = require('async')
-const Light = require('./schemas/light')
 const Request = require('./schemas/request')
 const Status = require('./schemas/status')
 const particle = new Particle('0885fe851c827803175ecff92dd30aae43fb065b')
@@ -41,10 +39,7 @@ router.get('/api/ping/:building?', (req, res) => {
 })
 
 router.post('/api/call', (req, res) => {
-
   const { name, arg, device } = req.body
-  console.log(`request from ${req.ip}`)
-  console.log(name, arg, device)
   particle.call(device, name, arg, req.io)
     .then((data) =>  res.send(data) )
     .catch(err => res.send(err))
@@ -73,7 +68,7 @@ router.get('/api/history/:limit?', (req, res) => {
         })
         res.send(data)
       }
-    }).limit(limit).sort({ date: -1 });
+    }).limit(limit).sort({ date: -1 })
   } catch (e) {
     res.sendStatus(400)
   }
@@ -107,5 +102,24 @@ router.get('/api/status/:name?', (req, res) => {
       res.send(data)
     }
   })
+})
+
+router.get('/api/good_night', (req, res) => {
+
+
+  particle.call('building_right', 'baker_light', 'off', req.io)
+  particle.call('building_right', 'dent_light', 'off', req.io)
+  particle.call('building_right', 'family_light', 'off', req.io)
+  particle.call('building_right', 'baker_door', '0', req.io)
+
+  particle.call('building_middle', 'flower_light', 'off', req.io)
+  particle.call('building_middle', 'photo_light', 'off', req.io)
+
+  particle.call('building_left', 'pixel_light', 'off', req.io)
+  particle.call('building_left', 'baller_light', 'off', req.io)
+  particle.call('building_left', 'music_light', 'off', req.io)
+  particle.call('building_left', 'cafe_door', '0', req.io)
+
+  res.sendStatus(200)
 })
 module.exports = router

@@ -13,7 +13,7 @@ class Particle {
     const { base, token, version } = this
     return http({
       host: base,
-      path: `/v1/devices?${token}`,
+      path: `${version}/devices?${token}`,
     })
   }
 
@@ -24,13 +24,10 @@ class Particle {
         .then(id => {
           http({
             host: base,
-            path: `/v1/devices/${id}/ping?${token}`,
+            path: `${version}/devices/${id}/ping?${token}`,
             method: 'PUT'
-          })
-            .then(data => resolve(data))
-            .catch(err => reject(err))
-        })
-        .catch(err => reject(err))
+          }) .then(data => resolve(data)) .catch(err => reject(err))
+        }) .catch(err => reject(err))
     })
   }
 
@@ -41,33 +38,34 @@ class Particle {
         .then(id => {
           http({
             host: base,
-            path: `/v1/devices/${id}?${token}`,
+            path: `${version}/devices/${id}?${token}`,
             method: 'GET'
-          })
-            .then(data => resolve(data))
-            .catch(err => reject(err))
-        })
-        .catch(err => reject(err))
+          }) .then(data => resolve(data)) .catch(err => reject(err))
+        }) .catch(err => reject(err))
     })
   }
 
-  call(device, name, arg, io) {
+  call(device, name, arg) {
     const { base, token, version } = this
     return new Promise((resolve, reject) => {
       this.getDeviceId(device)
         .then(id => {
           http({
             host: base,
-            path: `/v1/devices/${id}/${name}?${token}`,
+            path: `${version}/devices/${id}/${name}?${token}`,
             method: 'POST',
             data: { arg: arg }
           }).then(data => {
-            updateStatus(device, name, data.return_value).then(data => resolve(data)).catch(err => reject(err))
+            const value = data.return_value
+            updateStatus(device, name, value).then(data => {
+              logRequest(device, name, arg, value).then(() => { 
+                resolve(data)
+              }).catch(err => reject(err))
+            }).catch(err => reject(err))
           }) .catch(err => reject(err))
         }) .catch(err => reject(err))
     })
   }
-
 
   getDeviceId(input) {
     return new Promise((resolve, reject) => {
@@ -84,18 +82,35 @@ class Particle {
           } else {
             reject({ Error: 'No devices not found' })
           }
-        })
-        .catch(err => reject(err))
+        }) .catch(err => reject(err))
     })
   }
 }
 
-module.exports = Particle
+function logRequest(device, name, argument, value){
+  const type = name.split('_')[1]
+  return new Promise((resolve, reject) =>{
+    new Request({
+      device,
+      name, 
+      argument,
+      value,
+      type,
+      date: new Date()
+    }).save((err, data) => {
+      if(err){
+        reject(err)
+      }else {
+        resolve(data)
+      }
+    }) 
+  })
+}
 
 function updateStatus(device, name, status){
-  const type = name.split("_")[1]
+  const type = name.split('_')[1]
   return new Promise((resolve, reject) => {
-    Status.update({name}, {$set:{name, device, status, type}}, {upsert:true}, (err, data) => {
+    Status.update({name}, {$set:{name, device, status, type}}, {upsert:true}, (err) => {
       if(err){
         reject(err)
       }else{
@@ -105,23 +120,4 @@ function updateStatus(device, name, status){
   })
 }
 
-function logRequest(data) { 
-  return new Promise((resolve, reject) => {
-    const upload = new Request({
-      name: new String(data.name) || undefined,
-      argument: new String(data.argument) || undefined,
-      date: new String(data.date),
-      value: new String(data.value) || undefined,
-      device: new String(data.device) || undefined,
-    })
-
-    upload.save((err, data) => {
-      if (err) {
-        reject(err)
-      }
-      else {
-        resolve(data)
-      }
-    })
-  })
-}
+module.exports = Particle
