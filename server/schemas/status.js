@@ -6,7 +6,8 @@ const Status = new mongoose.Schema({
   device: String,
   icon  : String,
   floor : Number, 
-  type  : String
+  type  : String, 
+  active: Boolean
 })
 
 

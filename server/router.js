@@ -1,9 +1,10 @@
-const Particle = require('./lib/particle.js')
-const express = require('express')
-const router = express.Router()
-const Request = require('./schemas/request')
-const Status = require('./schemas/status')
-const particle = new Particle('0885fe851c827803175ecff92dd30aae43fb065b')
+const Particle  = require('./lib/particle.js')
+const express   = require('express')
+const router    = express.Router()
+const Request   = require('./schemas/request')
+const Status    = require('./schemas/status')
+const Rfid      = require ('./lib/rfid')
+const particle  = new Particle('0885fe851c827803175ecff92dd30aae43fb065b')
 
 router.get('/api', (req, res) => {
 
@@ -75,16 +76,21 @@ router.get('/api/history/:limit?', (req, res) => {
 
 
 router.post('/api/trigger', (req, res) => {
-  
-  console.log(req.body)
-
+  const { data } = req.body 
+  const rfid = new Rfid()
   particle.call('building_right', 'baker_light', 'on', req.io)
   particle.call('building_right', 'baker_door', '180', req.io)
+
+  rfid.save('building_right', 'rfid','read', data)
+  rfid.update('building_right', 'rfid', data,  true)
 
   setTimeout(() => {
     particle.call('building_right', 'baker_light', 'off', req.io)
     particle.call('building_right', 'baker_door', '0', req.io)
-  }, 4000)
+
+    rfid.save('building_right', 'rfid','read', data)
+    rfid.update('building_right', 'rfid', data,  false)
+  }, 30 * 1000)
 
   res.sendStatus(200)
 })

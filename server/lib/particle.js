@@ -110,7 +110,7 @@ function logRequest(device, name, argument, value){
 function updateStatus(device, name, status){
   const type = name.split('_')[1]
   return new Promise((resolve, reject) => {
-    Status.update({name}, {$set:{name, device, status, type}}, {upsert:true}, (err) => {
+    Status.update({ name }, { $set:{ name, device, status, type }}, { upsert:true }, err => {
       if(err){
         reject(err)
       }else{
