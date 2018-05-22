@@ -20,15 +20,10 @@ class Rfid{
 
   update(device, name, status, active){
     const floor = 'roof'
+    const type = 'rfid'
     return new Promise((resolve, reject) => {
       Status.update({ name } ,{
-        $set: {
-          name,
-          device,
-          status,
-          active,
-          floor
-        }
+        $set: { name, device, status, active, type, floor }
       }, {upsert:true}, (err, data) => {
         if(err){
           reject(err)
