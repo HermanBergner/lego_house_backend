@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 
 const Status = new mongoose.Schema({
-  name: String,
+  name  : String,
   status: Number,
   device: String,
-  icon: String,
-  floor: Number, 
-  type: String
+  icon  : String,
+  floor : Number, 
+  type  : String
 })
 
 
