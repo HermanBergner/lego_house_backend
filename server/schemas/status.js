@@ -5,7 +5,7 @@ const Status = new mongoose.Schema({
   status: Number,
   device: String,
   icon  : String,
-  floor : Number, 
+  floor : String, 
   type  : String, 
   active: Boolean
 })
