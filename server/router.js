@@ -81,15 +81,15 @@ router.post('/api/trigger', (req, res) => {
   particle.call('building_right', 'baker_light', 'on', req.io)
   particle.call('building_right', 'baker_door', '180', req.io)
 
-  rfid.save('building_right', 'rfid','read', data)
-  rfid.update('building_right', 'rfid', data,  true)
+  rfid.save('building_middle', 'rfid','read', data)
+  rfid.update('building_middle', 'rfid', data,  true)
 
   setTimeout(() => {
     particle.call('building_right', 'baker_light', 'off', req.io)
     particle.call('building_right', 'baker_door', '0', req.io)
 
-    rfid.save('building_right', 'rfid','read', data)
-    rfid.update('building_right', 'rfid', data,  false)
+    rfid.save('building_middle', 'rfid','read', data)
+    rfid.update('building_middle', 'rfid', data,  false)
   }, 30 * 1000)
 
   res.sendStatus(200)
