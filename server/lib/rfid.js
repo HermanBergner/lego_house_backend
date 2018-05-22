@@ -18,10 +18,9 @@ class Rfid{
     })
   }
 
-  update(device, name, status, active){
+  update(device, name, status, authorized){
     const floor = 'roof'
     const type = 'rfid'
-    const authorized = true
     return new Promise((resolve, reject) => {
       Status.update({ name } ,{
         $set: { name, device, status, authorized, type, floor }
