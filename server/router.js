@@ -128,4 +128,22 @@ router.get('/api/good_night', (req, res) => {
 
   res.sendStatus(200)
 })
+
+router.get('/api/good_morning', (req, res) => {
+
+  particle.call('building_right', 'baker_light', 'on', req.io)
+  particle.call('building_right', 'dent_light', 'on', req.io)
+  particle.call('building_right', 'family_light', 'on', req.io)
+  particle.call('building_right', 'baker_door', '0', req.io)
+
+  particle.call('building_middle', 'flower_light', 'on', req.io)
+  particle.call('building_middle', 'photo_light', 'on', req.io)
+
+  particle.call('building_left', 'pixel_light', 'on', req.io)
+  particle.call('building_left', 'baller_light', 'on', req.io)
+  particle.call('building_left', 'music_light', 'on', req.io)
+  particle.call('building_left', 'cafe_door', '0', req.io)
+
+  res.sendStatus(200)
+})
 module.exports = router
